@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "189175061077",
+    "project_id": "plastic-recycler",
+    "storage_bucket": "plastic-recycler.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:189175061077:android:4ce7eec9951d6b3ad852dc",
+        "android_client_info": {
+          "package_name": "com.plasticrecycler"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "189175061077-91lma1kpf9ok596letc98o3r32f1om9u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4vVMXq5YWKObbzPN9B7dkdHn9ugrC4Qc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "189175061077-91lma1kpf9ok596letc98o3r32f1om9u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
