@@ -33,17 +33,12 @@ import kotlin.collections.set
 class CreatePostActivity : AppCompatActivity() {
 
     private val GalleryPick = 1
-//    private var countPost: Int = 0
     lateinit var mDatabase: DatabaseReference
-    lateinit var clickPostRef: DatabaseReference
     var mAuth = FirebaseAuth.getInstance()
     var user = FirebaseAuth.getInstance().currentUser
     private lateinit var postRefImages: StorageReference
     private var mProgress: ProgressDialog? = null
-
     private var imageUri: Uri? = null
-    lateinit var postKey: String
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,9 +56,9 @@ class CreatePostActivity : AppCompatActivity() {
 
         buttonAddPost.setOnClickListener {
             mProgress!!.setTitle("Uploading");
-            mProgress!!.setMessage("Please wait");
+            mProgress!!.setMessage("Please wait")
             mProgress!!.show();
-            mProgress!!.setCanceledOnTouchOutside(false);
+            mProgress!!.setCanceledOnTouchOutside(false)
             saveImage()
         }
         buttonClose.setOnClickListener {
@@ -177,63 +172,4 @@ class CreatePostActivity : AppCompatActivity() {
         }
     }
 
-    private fun retrievePosts() {
-        postKey = intent.extras?.get("PostKey").toString();
-        clickPostRef = FirebaseDatabase.getInstance().reference.child("Posts").child(postKey);
-
-        val titleTxt = findViewById<View>(R.id.edt_postTitle) as EditText
-        var postTitle = titleTxt.text.toString()
-        val descriptionTxt = findViewById<View>(R.id.edt_postDescription) as EditText
-        var postDescription = descriptionTxt.text.toString()
-        val buttonPickImage: ImageView = findViewById(R.id.imageView)
-
-
-
-        /* clickPostRef.addValueEventListener(object : ValueEventListener {
-             override fun onDataChange(snapshot: DataSnapshot) {
-                 if (snapshot.exists()){
-                         var title = snapshot.child("title").value.toString().trim()
-                         var description = snapshot.child("description").getValue(String::class.java)
-                         var image = snapshot.child("postImage").getValue(String::class.java)
-                         titleTxt.text = title.toEditable()
-                         descriptionTxt.text = description?.toEditable()
-                 }
-             }
-             override fun onCancelled(error: DatabaseError) {
-                 TODO("Not yet implemented")
-             }
-
-
-         })*/
-
-
-        var valueEventListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                dataSnapshot.value
-
-                    var title = dataSnapshot.child("title").value.toString()
-                    var description = dataSnapshot.child("description").value.toString()
-                    var image = dataSnapshot.child("postImage").getValue(String::class.java)
-
-                    titleTxt.text = title.toEditable()
-                    descriptionTxt.text = description?.toEditable()
-                Picasso.get().load(image).into(buttonPickImage)
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.d(TAG, databaseError.message) //Don't ignore errors!
-            }
-        }
-        clickPostRef.addListenerForSingleValueEvent(valueEventListener)
-
-
-    }
-
-    fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
-
-    private fun deleteCurrentPost() {
-        clickPostRef.removeValue()
-//        SendUserToMainActivity()
-        Toast.makeText(this@CreatePostActivity, "Post Deleted", Toast.LENGTH_SHORT).show()
-    }
 }

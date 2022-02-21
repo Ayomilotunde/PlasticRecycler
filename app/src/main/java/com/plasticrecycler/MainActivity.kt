@@ -2,6 +2,7 @@ package com.plasticrecycler
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +16,6 @@ import com.plasticrecycler.adapter.PostAdapter
 import com.plasticrecycler.auth.LoginActivity
 import com.plasticrecycler.model.Post
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +24,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var mDatabase : DatabaseReference
     private lateinit var postRecyclerview : RecyclerView
     private lateinit var userArrayList : ArrayList<Post>
+    private lateinit var tempUserArrayList : ArrayList<Post>
+    lateinit var adapter: PostAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -31,6 +34,8 @@ class MainActivity : AppCompatActivity() {
 
         val buttonAddPost = findViewById<TextView>(R.id.postAdd)
         val buttonLogOut = findViewById<TextView>(R.id.btn_logOut)
+        val searchPost = findViewById<SearchView>(R.id.searchView)
+
         buttonAddPost.setOnClickListener {
             startActivity(Intent(this, CreatePostActivity::class.java))
         }
@@ -48,7 +53,34 @@ class MainActivity : AppCompatActivity() {
         (postRecyclerview.layoutManager as LinearLayoutManager).stackFromEnd = true
         (postRecyclerview.layoutManager as LinearLayoutManager).reverseLayout = true
 
-        userArrayList = arrayListOf<Post>()
+         userArrayList = arrayListOf<Post>()
+         tempUserArrayList = arrayListOf<Post>()
+
+        searchPost.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                searchPost.clearFocus()
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                tempUserArrayList.clear()
+                val searchText = newText!!.toLowerCase(Locale.getDefault())
+                if (searchText.isNotEmpty()) {
+                    userArrayList.forEach {
+                        if (it.title!!.toLowerCase(Locale.getDefault()).contains(searchText)){
+                            tempUserArrayList.add(it)
+                        }
+                    }
+                    postRecyclerview.adapter!!.notifyDataSetChanged()
+                } else {
+                    tempUserArrayList.clear()
+                    tempUserArrayList.addAll(userArrayList)
+                    postRecyclerview.adapter!!.notifyDataSetChanged()
+                }
+                return false
+            }
+
+        })
 
     }
 
@@ -68,7 +100,6 @@ class MainActivity : AppCompatActivity() {
         mDatabase = FirebaseDatabase.getInstance().getReference("Posts")
         val ordersRef = mDatabase.orderByChild("Counter")
 
-
         ordersRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
@@ -76,10 +107,8 @@ class MainActivity : AppCompatActivity() {
                         var user = userSnapshot.getValue(Post::class.java)
 
                         userArrayList.add(user!!)
-
-                        var adapter = PostAdapter(userArrayList)
+                         adapter = PostAdapter(tempUserArrayList)
                         postRecyclerview.adapter = adapter
-
 
                         adapter.setOnItemClickListener(object : PostAdapter.OnItemClickListener{
                             override fun onItemClick(position: Int) {
@@ -87,23 +116,18 @@ class MainActivity : AppCompatActivity() {
                                 val clickPostIntent = Intent(this@MainActivity, UpdatePostActivity::class.java)
                                 clickPostIntent.putExtra("PostKey", userArrayList[position].postid)
                                 startActivity(clickPostIntent)
-//                Toast.makeText(this@MainActivity, "Successfully registered :) $position" + user.postid, Toast.LENGTH_LONG).show()
                             }
                         })
                     }
+                    tempUserArrayList.addAll(userArrayList)
 
                 }
-
-
             }
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
-
-
         })
 
-
-
     }
+
 }

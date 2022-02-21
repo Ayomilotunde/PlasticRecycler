@@ -31,7 +31,6 @@ import java.util.*
 class UpdatePostActivity : AppCompatActivity() {
 
     private val GalleryPick = 1
-    private var countPost: Long = 0
     lateinit var mDatabase: DatabaseReference
     lateinit var clickPostRef: DatabaseReference
     var mAuth = FirebaseAuth.getInstance()
@@ -94,9 +93,7 @@ class UpdatePostActivity : AppCompatActivity() {
 
     private fun retrievePosts() {
         val titleTxt = findViewById<View>(R.id.edt_postTitle) as EditText
-        var postTitle = titleTxt.text.toString()
         val descriptionTxt = findViewById<View>(R.id.edt_postDescription) as EditText
-        var postDescription = descriptionTxt.text.toString()
         val buttonPickImage: ImageView = findViewById(R.id.imageView)
 
         var valueEventListener = object : ValueEventListener {
@@ -117,10 +114,7 @@ class UpdatePostActivity : AppCompatActivity() {
             }
         }
         clickPostRef.addListenerForSingleValueEvent(valueEventListener)
-
-//08106070166
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, @Nullable data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -158,14 +152,6 @@ class UpdatePostActivity : AppCompatActivity() {
             mProgress!!.dismiss()
           addRecyclerProduct(image)
         }
-//        if (imageUri == null && image.isEmpty()) {
-//            mProgress!!.dismiss()
-//            Toast.makeText(this, "Please Upload an Image", Toast.LENGTH_SHORT).show()
-//        }
-//        else {
-//            mProgress!!.dismiss()
-//            Toast.makeText(this, "Please Upload an Image", Toast.LENGTH_SHORT).show()
-//        }
     }
 
     private fun addRecyclerProduct(uri: String) {
@@ -212,67 +198,15 @@ class UpdatePostActivity : AppCompatActivity() {
                     finish()
                 }
         }
-        /*if (postTitle.isNotEmpty() && postDescription.isNotEmpty() && imageUri == null) {
-            val user = mAuth.currentUser
-            val uid = user!!.uid
-            val postId = FirebaseAuth.getInstance().uid
-
-            val PostMap: HashMap<String, Any> = HashMap()
-//            PostMap["uid"] = uid
-            PostMap["date"] = saveCurrentDate
-            PostMap["time"] = saveCurrentTime
-            PostMap["title"] = postTitle
-            PostMap["postImage"] = image
-            PostMap["description"] = postDescription
-            PostMap["Counter"] = countPost++
-//            PostMap["postid"] = postId + saveCurrentDate + saveCurrentTime
-
-            clickPostRef.updateChildren(PostMap)
-                .addOnCompleteListener {
-                    mProgress!!.dismiss()
-                    titleTxt.setText("")
-                    descriptionTxt.setText("")
-                    Toast.makeText(
-                        this@UpdatePostActivity,
-                        "Successfully Posted",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
-                }
-        }*/
         else {
             Toast.makeText(this, "Please fill up the Credentials :|", Toast.LENGTH_SHORT).show()
         }
     }
-
-
-
     fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
     private fun deleteCurrentPost() {
         clickPostRef.removeValue()
         finish()
         Toast.makeText(this@UpdatePostActivity, "Post Deleted", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun updatePost() {
-
-        val builder: AlertDialog.Builder = AlertDialog.Builder(this@UpdatePostActivity)
-        builder.setTitle("Edit Post")
-
-        val inPutText = EditText(this@UpdatePostActivity)
-        inPutText.setText(title)
-        builder.setView(inPutText)
-        builder.setPositiveButton("Update",
-            DialogInterface.OnClickListener { dialogInterface, i ->
-                clickPostRef.child("title").setValue(inPutText.text.toString())
-                Toast.makeText(this@UpdatePostActivity, "Post Updated", Toast.LENGTH_SHORT).show()
-            })
-        builder.setNegativeButton("Cancel",
-            DialogInterface.OnClickListener { dialogInterface, i -> dialogInterface.cancel() })
-        val dialog: Dialog = builder.create()
-        dialog.show()
-        dialog.window?.setBackgroundDrawableResource(android.R.color.holo_green_light)
     }
 }

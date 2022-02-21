@@ -17,7 +17,6 @@ import com.plasticrecycler.MainActivity
 import com.plasticrecycler.R
 
 class LoginActivity : AppCompatActivity() {
-    lateinit var mDatabase : DatabaseReference
     var mAuth = FirebaseAuth.getInstance()
     var user = FirebaseAuth.getInstance().currentUser
     private var mProgress: ProgressDialog? = null

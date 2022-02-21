@@ -7,6 +7,16 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_margin="5dp"
+        android:background="@drawable/custom_search_background"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout" />
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
@@ -33,13 +43,13 @@
                     android:id="@+id/btn_logOut"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:visibility="visible"
+                    android:layout_margin="5dp"
+                    android:padding="3dp"
                     android:text="Log Out"
                     android:textColor="@color/black"
-                    android:textStyle="bold"
                     android:textSize="10sp"
-                    android:padding="3dp"
-                    android:layout_margin="5dp"
+                    android:textStyle="bold"
+                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -52,7 +62,7 @@
                     android:background="@drawable/button_design"
                     android:fontFamily="sans-serif-condensed-medium"
                     android:gravity="center"
-                   android:padding="10dp"
+                    android:padding="10dp"
                     android:src="@drawable/save_edited_info"
                     android:text="Create"
                     android:textColor="@color/black"
@@ -89,9 +99,9 @@
         android:id="@+id/recylerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_margin="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout"
-        tools:listitem="@layout/post_items"/>
+        app:layout_constraintTop_toBottomOf="@+id/searchView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -48,7 +48,7 @@ class RegisterActivity : AppCompatActivity() {
         var password = passwordTxt.text.toString()
         var name = nameTxt.text.toString()
 
-        if (!email.isEmpty() && !password.isEmpty() && !name.isEmpty()) {
+        if (email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty()) {
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this
             ) { task ->
                 if (task.isSuccessful) {

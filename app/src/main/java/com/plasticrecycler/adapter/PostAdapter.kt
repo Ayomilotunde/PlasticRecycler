@@ -53,7 +53,6 @@ class PostAdapter(private val postList: ArrayList<Post>): RecyclerView.Adapter<P
        return postList.size
     }
 
-
     class MyViewHolder(itemView: View, listener: OnItemClickListener) : RecyclerView.ViewHolder(itemView) {
 
         val title: TextView  = itemView.findViewById(R.id.tvTitle)
